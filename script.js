@@ -94,4 +94,10 @@
         "options": ["A. To perform a loop", "B. To declare a function", "C. To make decisions based on conditions", "D. To define a class"],
         "answer": "C"
     }
-]
+];
+
+const questionelement= document.getElementById("questiom");
+const Next_button=document.getElementById("next-button");
+const answer_button=document.getElementById("Answer_Buttons");
+
+const questionIndex=0,score=0;
