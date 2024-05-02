@@ -101,3 +101,16 @@ const Next_button=document.getElementById("next-button");
 const answer_button=document.getElementById("Answer_Buttons");
 
 const questionIndex=0,score=0;
+ 
+
+// we need to write function for displaying question and moving for next question
+
+
+function quizQuestion()
+{
+
+let currentquestion= quiz_data[questionIndex];
+let question_number= questionIndex;
+questionelement.innerHTML=question_number+"."+currentquestion;
+
+}
