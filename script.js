@@ -73,7 +73,7 @@
         "question": "What is the purpose of a constructor method in object-oriented programming?",
         "options": ["A. To create objects", "B. To destroy objects", "C. To update objects", "D. To copy objects"],
         "answer": "A"
-    },
+    },   
     {
         "question": "Which of the following is not a valid Python data type?",
         "options": ["A. int", "B. double", "C. list", "D. tuple"],
@@ -96,21 +96,110 @@
     }
 ];
 
-const questionelement= document.getElementById("questiom");
-const Next_button=document.getElementById("next-button");
-const answer_button=document.getElementById("Answer_Buttons");
+// const questionelement= document.getElementById("questiom");
+// const Next_button=document.getElementById("next-button");
+// const answer_button=document.getElementById("Answer_Buttons");
 
-const questionIndex=0,score=0;
- 
+let currentQuestionIndex = 0;
+let score = 0;
+let startTime = Date.now();
+let answers = [];
 
-// we need to write function for displaying question and moving for next question
+document.addEventListener('DOMContentLoaded', () => {
+    displayQuestion();
+    startTimer();
+    document.getElementById('next-button').addEventListener('click', nextQuestion);
+    document.getElementById('prev-button').addEventListener('click', prevQuestion);
+    document.getElementById('submit-button').addEventListener('click', submitQuiz);
+    document.getElementById('next-button').disabled = true; // Disable next button initially
+});
+/*
+
+displayQuestion function is mainly for Showing question  with Multiple choices
 
 
-function quizQuestion()
-{
+*/
+function displayQuestion() {
+    const questionElement = document.getElementById('question');
+    const optionsContainer = document.getElementById('Answer_Buttons');
+    const currentQuestion = quiz_data[currentQuestionIndex];
+    
+    questionElement.innerText = currentQuestion.question;
+    optionsContainer.innerHTML = '';
 
-let currentquestion= quiz_data[questionIndex];
-let question_number= questionIndex;
-questionelement.innerHTML=question_number+"."+currentquestion;
+    currentQuestion.options.forEach(option => {
+        const optionButton = document.createElement('button');
+        optionButton.className = 'btn';
+        optionButton.innerText = option;
+        optionButton.addEventListener('click', () => selectOption(optionButton, option));
+        optionsContainer.appendChild(optionButton);
+    });
+    document.getElementById('prev-button').style.display = currentQuestionIndex === 0 ? 'none' : 'inline-block';
+    document.getElementById('next-button').style.display = 'inline-block';
+    document.getElementById('submit-button').style.display = 'none';
 
+
+    // Update the index of the question ,For that we need to read question index element
+
+    const Ques_index=document.getElementById('question-index');
+    const Total_Questn_Count=document.getElementById('total-questions');
+    Ques_index.innerText=currentQuestionIndex+1;
+    Total_Questn_Count.innerText=quiz_data.length;
+}
+
+
+function selectOption(button, selectedOption) {
+    const currentQuestion = quiz_data[currentQuestionIndex];
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(btn => btn.disabled = true);
+
+    if (selectedOption[0] === currentQuestion.answer) {
+        score++;
+    }
+    answers[currentQuestionIndex] = selectedOption;
+    button.style.backgroundColor = selectedOption[0] === currentQuestion.answer ? 'green' : 'red';
+
+    document.getElementById('next-button').disabled = false;
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quiz_data.length) {
+        displayQuestion();
+        document.getElementById('next-button').disabled = true;
+        if (currentQuestionIndex === quiz_data.length - 1) {
+            document.getElementById('next-button').style.display = 'none';
+            document.getElementById('submit-button').style.display = 'inline-block';
+        }
+    }
+}
+
+function prevQuestion() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        displayQuestion();
+        document.getElementById('next-button').disabled = false;
+        document.getElementById('submit-button').style.display = 'none';
+        document.getElementById('next-button').style.display = 'inline-block';
+    }
+}
+
+function submitQuiz() {
+    const resultContainer = document.getElementById('result-container');
+    const scoreElement = document.getElementById('score');
+    const quizContainer = document.querySelector('.quiz');
+    
+    scoreElement.innerHTML = `Your Score: ${score} / ${quiz_data.length}`;
+    resultContainer.style.display = 'block';
+    quizContainer.style.display = 'none';
+}
+
+function startTimer() {
+    setInterval(() => {
+        const now = Date.now();
+        const elapsed = Math.floor((now - startTime) / 1000);
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        document.getElementById('time').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
 }
