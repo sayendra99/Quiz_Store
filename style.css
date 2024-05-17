@@ -30,7 +30,7 @@ font-weight: 25px;
 color: black;
 font-weight: 300;
 border-bottom: 1px solid #333;
-
+text-align: center;
 
 }
 
@@ -78,7 +78,7 @@ color: #001e4d;
 
 }
 .next-button{
- background: white;
+ background:#17B169;
  color: black;
  font-weight:500px;
  width: 150px;
@@ -87,14 +87,50 @@ color: #001e4d;
  padding:10px;
  border-radius:4px;
  cursor: pointer;
- display: none;
+ display: inline-block;
+
  
 
  
+}
+.prev-button{
+    background:#F0E68C;
+    color: black;
+    font-weight:500px;
+    width: 150px;
+    margin:20px auto;
+    border:0px;
+    padding:10px;
+    border-radius:4px;
+    cursor: pointer;
+    display: inline-block;
+   
+    
+   
+    
+   }
+.prev-button:hover
+{
+    background:#FFD700;
+    color:red;
+
 }
 
 .next-button:hover{
     
     background: green;
     color:white;
+}
+
+#timer
+{
+    text-align: right;
+    background-color: aqua;
+    margin: 5px;
+    padding: 5px 10px;  /* Adjusted padding to fit the text area */
+    display: inline-block;  /* Make the div only as wide as its content */
+    border-radius: 2;  /* Optional: Add rounded corners for better appearance */
+    font-weight: bold;  /* Optional: Make the text bold for better readability */
+    float: right;
+    font-size: medium;
 }
