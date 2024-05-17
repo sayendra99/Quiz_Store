@@ -15,8 +15,12 @@
 
 <!-- <h1> Quiz is a way to know your Strength of Understanding a subject</h1> -->
 
-<div class="app">
-<h1>Sample quiz questions</h1>
+<div class="app"><div id="timer">Time: <span id="time">00:00</span></div>
+<h1>Python Quiz</h1>
+       
+        <div class="index">Question <span id="question-index">1</span> of <span id="total-questions">2</span></div>
+       
+
 <div class="quiz">
    <h2 id="question"> Sample question what is the capital income formula </h2>
    <div id="Answer_Buttons">
@@ -26,7 +30,9 @@
     <button class="btn"> Answer 4</button>
    </div>
    
-    <button class="next-button">Next</button>
+   <button class="next-button" id="next-button">Next</button>
+   <button class="prev-button" id="prev-button" style="display:none;">Previous</button>
+   <button class="submit-button" id="submit-button">Submit</button>    
    
 </div>
 </div>
