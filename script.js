@@ -104,6 +104,7 @@ let currentQuestionIndex = 0;
 let score = 0;
 let startTime = Date.now();
 let answers = [];
+let  timeIn=0;
 
 document.addEventListener('DOMContentLoaded', () => {
     displayQuestion();
@@ -133,11 +134,22 @@ function displayQuestion() {
         optionButton.innerText = option;
         optionButton.addEventListener('click', () => selectOption(optionButton, option));
         optionsContainer.appendChild(optionButton);
-    });
-    document.getElementById('prev-button').style.display = currentQuestionIndex === 0 ? 'none' : 'inline-block';
-    document.getElementById('next-button').style.display = 'inline-block';
-    document.getElementById('submit-button').style.display = 'none';
+        if (answers[currentQuestionIndex] === option) {
+            optionButton.style.backgroundColor ="#EE82EE"; // Change to whatever style you prefer
+        }
 
+    });
+
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(btn => btn.disabled = false);
+
+    document.getElementById('prev-button').style.display = currentQuestionIndex === 0 ? 'none' : 'inline-block';
+   
+    document.getElementById('submit-button').style.display = currentQuestionIndex === quiz_data.length - 1 ? 'inline-block' : 'none';
+
+    if (!answers[currentQuestionIndex]) {
+        document.getElementById('next-button').disabled = true;
+    }
 
     // Update the index of the question ,For that we need to read question index element
 
@@ -145,57 +157,92 @@ function displayQuestion() {
     const Total_Questn_Count=document.getElementById('total-questions');
     Ques_index.innerText=currentQuestionIndex+1;
     Total_Questn_Count.innerText=quiz_data.length;
+    document.getElementById('next-button').style.display = currentQuestionIndex === quiz_data.length - 1 ? 'none' : 'inline-block';
+
+
+
 }
 
 
 function selectOption(button, selectedOption) {
-    const currentQuestion = quiz_data[currentQuestionIndex];
-    const buttons = document.querySelectorAll('.btn');
-    buttons.forEach(btn => btn.disabled = true);
+    // const currentQuestion = quiz_data[currentQuestionIndex];
+    // const buttons = document.querySelectorAll('.btn');
+    // buttons.forEach(btn => btn.disabled = true);
 
-    if (selectedOption[0] === currentQuestion.answer) {
+    // if (selectedOption[0] === currentQuestion.answer) {
+    //     score++;
+    // }
+    // answers[currentQuestionIndex] = selectedOption;
+    // button.style.backgroundColor = selectedOption[0] === currentQuestion.answer ? 'green' : 'red';
+
+    // document.getElementById('next-button').disabled = false;
+
+
+
+
+     const cq=quiz_data[currentQuestionIndex];
+     const buttons=document.querySelectorAll('.btn');
+     buttons.forEach(btn=>btn.displayed=true);
+     if (selectedOption[0] === cq.answer) {
         score++;
-    }
-    answers[currentQuestionIndex] = selectedOption;
-    button.style.backgroundColor = selectedOption[0] === currentQuestion.answer ? 'green' : 'red';
+     }
+     answers[currentQuestionIndex] = selectedOption;
+     button.style.backgroundColor = selectedOption[0] === cq.answer ? 'green' : 'red';
+     document.getElementById("next-button").disabled=false;
 
-    document.getElementById('next-button').disabled = false;
 }
 
-function nextQuestion() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < quiz_data.length) {
-        displayQuestion();
-        document.getElementById('next-button').disabled = true;
-        if (currentQuestionIndex === quiz_data.length - 1) {
-            document.getElementById('next-button').style.display = 'none';
-            document.getElementById('submit-button').style.display = 'inline-block';
-        }
-    }
-}
+// function nextQuestion() {
+//     currentQuestionIndex++;
+//     if (currentQuestionIndex < quiz_data.length) {
+//         displayQuestion();
+//         document.getElementById('next-button').disabled = true;
+//         if (currentQuestionIndex === quiz_data.length - 1) {
+//             document.getElementById('next-button').style.display = 'none';
+//             document.getElementById('submit-button').style.display = 'inline-block';
+//         }
+//     }
+// }
 
-function prevQuestion() {
-    if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        displayQuestion();
-        document.getElementById('next-button').disabled = false;
-        document.getElementById('submit-button').style.display = 'none';
-        document.getElementById('next-button').style.display = 'inline-block';
-    }
-}
+// function prevQuestion() {
+//     if (currentQuestionIndex > 0) {
+//         currentQuestionIndex--;
+//         displayQuestion();
+//         document.getElementById('next-button').disabled = false;
+//         document.getElementById('submit-button').style.display = 'none';
+//         document.getElementById('next-button').style.display = 'inline-block';
+//     }
+// }
 
 function submitQuiz() {
+    // const resultContainer = document.getElementById('result-container');
+    // const scoreElement = document.getElementById('score');
+    // const quizContainer = document.querySelector('.quiz');
+
+    // scoreElement.innerHTML = `Your Score: ${score} / ${quiz_data.length}`;
+    // resultContainer.style.display = 'block';
+    // quizContainer.style.display = 'none';
+
+    // // Stop the timer
+    // stopTimer();
+
     const resultContainer = document.getElementById('result-container');
     const scoreElement = document.getElementById('score');
     const quizContainer = document.querySelector('.quiz');
-    
+
     scoreElement.innerHTML = `Your Score: ${score} / ${quiz_data.length}`;
     resultContainer.style.display = 'block';
     quizContainer.style.display = 'none';
+
+    // Stop the timer
+    stopTimer();
 }
 
+
+
+// StartTimer functionality is basically calculates the time which ellapsed after starting quiz here we used callback function for every 1000ms to calcualte the elapsed time
 function startTimer() {
-    setInterval(() => {
+   timeIn= setInterval(() => {
         const now = Date.now();
         const elapsed = Math.floor((now - startTime) / 1000);
         const minutes = Math.floor(elapsed / 60);
@@ -203,3 +250,37 @@ function startTimer() {
         document.getElementById('time').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }, 1000);
 }
+// Stop time 
+function stopTimer() {
+    clearInterval(timeIn);
+}
+
+//next button 
+
+document.getElementById('next-button').addEventListener('click', () => {
+    if (currentQuestionIndex < quiz_data.length - 1) {
+        currentQuestionIndex++;
+        displayQuestion();
+    }
+});
+
+
+//previous button
+
+document.getElementById('prev-button').addEventListener('click', () => {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        displayQuestion();
+    }
+});
+// getting  quiz results
+
+document.getElementById('submit-button').addEventListener('click', submitQuiz);
+document.getElementById('submit-button').addEventListener('click', stopTimer());
+
+// Start the quiz
+document.addEventListener('DOMContentLoaded', () => {
+    displayQuestion();
+    startTimer();
+});
+
